@@ -1,0 +1,26 @@
+{
+  "name": "apollo-bacstack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@biancoroyal/bacstack": "0.0.1-beta.15",
+    "apollo-datasource": "^0.3.1",
+    "apollo-server": "^2.4.8",
+    "apollo-server-express": "^2.4.8",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "encoding-japanese": "^1.0.29",
+    "express": "^4.16.4",
+    "graphql": "^14.2.1",
+    "graphql-tools": "^4.0.4",
+    "isemail": "^3.2.0",
+    "sequelize": "^5.3.5",
+    "sqlite3": "^4.0.6"
+  }
+}
