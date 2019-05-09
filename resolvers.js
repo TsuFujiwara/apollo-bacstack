@@ -17,7 +17,44 @@ Resolver functions accept four arguments:
 
 module.exports = {
   Query: {
-    me: async (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser()
+    me: async (_, __, { dataSources }) =>
+      dataSources.userAPI.findOrCreateUser(),
+    targets: async (_, __, { dataSources }) => {
+      // get targets by user
+      const targets = await dataSources.userAPI.getTargetsByUser();
+      // return targets
+      return targets;
+    },
+    objects: async (_, { targetIds }, { dataSources }) => {
+      const doubleArr = await Promise.all(
+        targetIds.map(async targetId => {
+          return await dataSources.userAPI.getObjectsByTarget({
+            targetId: targetId
+          });
+        })
+      );
+      const list = await doubleArr.reduce((pre, current) => {
+        pre.push(...current);
+        return pre;
+      }, []);
+      // console.log(list);
+      return list;
+    },
+    timeSeries: async (_, { obIds }, { dataSources }) => {
+      const doubleArr = await Promise.all(
+        obIds.map(obId => {
+          return dataSources.userAPI.getTimeSeriesByObject({
+            obId: obId
+          });
+        })
+      );
+      const list = await doubleArr.reduce((pre, current) => {
+        pre.push(...current);
+        return pre;
+      }, []);
+      // console.log(list);
+      return list;
+    }
   },
 
   User: {
@@ -41,7 +78,6 @@ module.exports = {
   Object: {
     timeSeries: async (object, __, { dataSources }) => {
       const timeSeries = await dataSources.userAPI.getTimeSeriesByObject({
-        targetId: object.targetId,
         obId: object.id
       });
       return timeSeries;

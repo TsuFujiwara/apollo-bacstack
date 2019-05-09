@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useReducer } from "react";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
@@ -7,6 +7,9 @@ import gql from "graphql-tag";
 
 import Pages from "./pages";
 import Login from "./pages/login";
+
+import Context from "./context";
+import reducer from "./reducer";
 import { resolvers, typeDefs } from "./resolvers";
 
 const cache = new InMemoryCache();
@@ -40,11 +43,20 @@ const IS_LOGGED_IN = gql`
 `;
 
 const App = () => {
+  // useContext hookの戻り値による初期状態の定義
+  const initialState = useContext(Context);
+  // useReducer hookの戻り値を配列に格納
+  const [state, dispatch] = useReducer(reducer, initialState);
+  // console.log({ state });
+
   return (
     <ApolloProvider client={client}>
-      <Query query={IS_LOGGED_IN}>
-        {({ data }) => (data.isLoggedIn ? <Pages /> : <Login />)}
-      </Query>
+      {/* Contextのインスタンスによるプロバイダ定義 */}
+      <Context.Provider value={{ state, dispatch }}>
+        <Query query={IS_LOGGED_IN}>
+          {({ data }) => (data.isLoggedIn ? <Pages /> : <Login />)}
+        </Query>
+      </Context.Provider>
     </ApolloProvider>
   );
 };

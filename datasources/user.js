@@ -430,7 +430,7 @@ class UserAPI extends DataSource {
     const found = await this.store.targets.findAll({
       where: { userId }
     });
-    // console.log(found);
+    console.log(found);
     return found;
   }
 
@@ -442,11 +442,12 @@ class UserAPI extends DataSource {
     return found;
   }
 
-  async getTimeSeriesByObject({ targetId, obId }) {
+  async getTimeSeriesByObject({ obId }) {
     const userId = this.context.user.id;
     const found = await this.store.timeseries.findAll({
-      where: { userId, targetId, obId }
+      where: { userId, obId }
     });
+    console.log(found[0]["dataValues"]);
     return found;
   }
 

@@ -3,6 +3,9 @@ const { gql } = require("apollo-server");
 const typeDefs = gql`
   type Query {
     me: User
+    targets: [Target]
+    objects(targetIds: [ID!]): [Object]
+    timeSeries(obIds: [ID!]): [TimeSeries]
   }
 
   type Mutation {

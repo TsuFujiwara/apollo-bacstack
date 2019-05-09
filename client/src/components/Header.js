@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { ApolloConsumer } from "react-apollo";
 
 import { fade } from "@material-ui/core/styles/colorManipulator";
@@ -11,8 +11,6 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
-
-import { BacnetObjectsTable } from "../components";
 
 const styles = theme => ({
   root: {
@@ -63,63 +61,60 @@ const styles = theme => ({
     [theme.breakpoints.up("md")]: {
       width: 200
     }
+  },
+  bar: {
+    backgroundColor: "#2962ff",
+    color: theme.palette.common.white
   }
 });
 
-const TargetsAndObjects = ({ classes }) => {
+const Header = ({ classes }) => {
   return (
-    <Fragment>
-      {/* ↑ Apolloクライアント(GraphQLのクエリ)を使えるように設定 */}
-      <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="Menu"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
+    <div className={classes.root}>
+      <AppBar position="static" className={classes.bar}>
+        <Toolbar>
+          <IconButton
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="Menu"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" color="inherit" className={classes.grow}>
+            <a href="/" style={{ textDecoration: "none", color: "white" }}>
               BACnet Client App
-            </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput
-                }}
-              />
+            </a>
+          </Typography>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
             </div>
+            <InputBase
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput
+              }}
+            />
+          </div>
 
-            <ApolloConsumer>
-              {client => (
-                <Button
-                  onClick={() => {
-                    client.writeData({ data: { isLoggedIn: false } });
-                    localStorage.clear();
-                  }}
-                  color="inherit"
-                >
-                  Logout
-                </Button>
-              )}
-            </ApolloConsumer>
-          </Toolbar>
-        </AppBar>
-
-        {/* ここから未完成 */}
-        <BacnetObjectsTable />
-        {/* <BacnetObjectsTable targets={data.me.targets.name}>
-                <Objects objects={data.me.targets.objects.objectId} />
-              </BacnetObjectsTable> */}
-      </div>
-    </Fragment>
+          <ApolloConsumer>
+            {client => (
+              <Button
+                onClick={() => {
+                  client.writeData({ data: { isLoggedIn: false } });
+                  localStorage.clear();
+                }}
+                color="inherit"
+              >
+                Logout
+              </Button>
+            )}
+          </ApolloConsumer>
+        </Toolbar>
+      </AppBar>
+    </div>
   );
 };
 
-export default withStyles(styles)(TargetsAndObjects);
+export default withStyles(styles)(Header);
